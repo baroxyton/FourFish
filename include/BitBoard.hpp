@@ -7,11 +7,14 @@ class BitBoard{
   BitBoard();
   BitBoard(STATE_t stateRed, STATE_t stateYellow);
   ~BitBoard();
+  void clear();
 
   private:
   void joinStates();
   STATE_t stateRed;
   STATE_t stateYellow;
   STATE_t stateCombined;
+  int width;
+  int height;
 };
 
