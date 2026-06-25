@@ -8,6 +8,8 @@ class BitBoard{
   BitBoard(STATE_t stateRed, STATE_t stateYellow);
   ~BitBoard();
   void clear();
+  void setDimensions(const int& width, const int& height);
+
 
   private:
   void joinStates();
