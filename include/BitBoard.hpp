@@ -13,8 +13,8 @@ class BitBoard{
   ~BitBoard();
 
   void clear();
-  void setDimensions(const int& width, const int& height);
-  int getField(int x, int y);
+  void setDimensions(int width, int height);
+  int getField(int x,int y) const;
   bool canPlay(int row);
   void play(int row);
   bool isRedTurn();
@@ -22,9 +22,11 @@ class BitBoard{
   bool isDraw();
   bool hasWon(int color);
   int getBoard();
-  BitBoard operator>>(int bits) const {
 
-  }
+  BitBoard operator>>(int shift) const;
+  BitBoard operator<<(int shift) const;
+  BitBoard operator^(BitBoard board) const;
+
 
 
   private:
