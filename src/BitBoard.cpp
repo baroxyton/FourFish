@@ -36,6 +36,28 @@ STATE_t BitBoard::getColumnCombined(int column){
   return (stateCombined >> (column * height)) & columnMask;
 }
 
+bool BitBoard::canPlay(int column){
+  return getColumnCombined(column) > columnMask;
+}
+
+bool BitBoard::isRedTurn(){
+ return turn%2 == 0;
+}
+
+void BitBoard::play(int column){
+  STATE_t move = getColumnCombined(column);
+  move = ((((move) << 1)^1) & ~move) << (column * height);
+
+  if(isRedTurn()){
+    stateRed = stateRed ^ move;
+  }
+  else{
+    stateYellow = stateYellow ^ move;
+  }
+
+  joinStates();
+}
+
 int BitBoard::getField(int x,int y) const { // 0-indexed
   int shift = y + x * height; // Rotated representation for efficiency; shift field to LSB
   static const STATE_t CLEAR_ALL_BUT_LSB = 1ULL;
