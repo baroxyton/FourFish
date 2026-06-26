@@ -31,13 +31,16 @@ class BitBoard{
 
   private:
   void joinStates();
-  int getRow(int row);
-  int getColumn(int column);
+  STATE_t getRowCombined(int row);
+  STATE_t getColumnCombined(int column);
   int turn;
   bool over;
+
   STATE_t stateRed;
   STATE_t stateYellow;
   STATE_t stateCombined;
+  STATE_t columnMask;
+
   int width;
   int height;
 };

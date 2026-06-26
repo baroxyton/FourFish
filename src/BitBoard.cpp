@@ -25,6 +25,15 @@ void BitBoard::clear(){
 void BitBoard::setDimensions(int width, int height){
   this->height = height;
   this->width = width;
+
+  this->columnMask = 0;
+  for(int i = 0; i < height; i++){
+    this->columnMask = (this->columnMask << 1) + 1;
+  }
+}
+
+STATE_t BitBoard::getColumnCombined(int column){
+  return (stateCombined >> (column * height)) & columnMask;
 }
 
 int BitBoard::getField(int x,int y) const { // 0-indexed
