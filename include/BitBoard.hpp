@@ -18,9 +18,9 @@ class BitBoard{
   bool canPlay(int row);
   void play(int row);
   bool isRedTurn();
+  bool hasWon(int color);
   bool isOver();
   bool isDraw();
-  bool hasWon(int color);
   int getBoard();
 
   BitBoard operator>>(int shift) const;
@@ -40,6 +40,8 @@ class BitBoard{
   STATE_t stateYellow;
   STATE_t stateCombined;
   STATE_t columnMask;
+  STATE_t firstRowMask;
+  STATE_t lastRowMask;
 
   int width;
   int height;

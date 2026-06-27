@@ -30,6 +30,16 @@ void BitBoard::setDimensions(int width, int height){
   for(int i = 0; i < height; i++){
     this->columnMask = (this->columnMask << 1) + 1;
   }
+
+  this->firstRowMask = 0;
+  for(int i = 0; i < width; i++){
+    this->firstRowMask = (this->firstRowMask << height) + 1;
+  }
+
+  this->lastRowMask = 0;
+  for(int i = 0; i < width; i++){
+    this->lastRowMask = ((this->lastRowMask << height) + 2) >> (height-1);
+  }
 }
 
 STATE_t BitBoard::getColumnCombined(int column){
@@ -66,6 +76,31 @@ int BitBoard::getField(int x,int y) const { // 0-indexed
   STATE_t hasRed = (stateRed >> shift) & CLEAR_ALL_BUT_LSB; // red = 1
   STATE_t hasYellow = (stateYellow >> shift) & CLEAR_ALL_BUT_LSB; // yellow = 2
   return hasYellow * 2 + hasRed;
+}
+
+bool BitBoard::hasWon(int color){
+  STATE_t board;
+  if(color == redField){
+    board = stateRed;
+  }
+  else{
+    board = stateYellow;
+  }
+
+  // check column win
+  bool won = ((board >> 2) & board) & (((board >> 2) & board) >> 1);
+
+  // check row win
+  won = won || ((board >> 2 * height) & board) & (((board << 2 * height) & board) >> 1 * height);
+
+  // check NE diagonal
+  won = won || (board & (board >> 2 * (height+1))) & ((board & (board >> 2 * (height+1))) >> (height+1));
+
+
+  // check SW diagonal
+  won = won || (board & (board >> 2 * (height-1))) & ((board & (board >> 2 * (height-1))) >> (height-1));
+
+  return won;
 }
 
 
