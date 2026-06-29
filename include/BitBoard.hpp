@@ -5,6 +5,8 @@
 #define redField 0
 #define yellowField 1
 #define emptyField 2
+#define EMPTY_BOARD 0ULL
+#define CLEAR_ALL_BUT_LSB 1ULL
 
 class BitBoard{
   public:
@@ -21,7 +23,7 @@ class BitBoard{
   bool hasWon(int color);
   bool isOver();
   bool isDraw();
-  int getBoard();
+  STATE_t getBoard(int board);
 
   BitBoard operator>>(int shift) const;
   BitBoard operator<<(int shift) const;
@@ -31,8 +33,8 @@ class BitBoard{
 
   private:
   void joinStates();
-  STATE_t getRowCombined(int row);
-  STATE_t getColumnCombined(int column);
+  STATE_t getRowCombined(int row, int boardn);
+  STATE_t getColumnCombined(int column, int boardn);
   int turn;
   bool over;
 

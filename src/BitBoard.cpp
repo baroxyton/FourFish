@@ -40,12 +40,22 @@ void BitBoard::setDimensions(int width, int height){
   }
 }
 
-STATE_t BitBoard::getColumnCombined(int column){
+STATE_t BitBoard::getColumnCombined(int column, int boardn){
+  STATE_t board = getBoard(boardn);
   return (stateCombined >> (column * height)) & columnMask;
 }
 
+  STATE_t BitBoard::getRowCombined(int row, int boardn){
+  STATE_t board = getBoard(boardn);
+  STATE_t result = 0ULL;
+  for(STATE_t i = 0; i < width; i++){
+    result |= ((board << (height*i + row)) & CLEAR_ALL_BUT_LSB) >> row;
+  }
+  return result;
+}
+
 bool BitBoard::canPlay(int column){
-  return getColumnCombined(column) > columnMask;
+  return getColumnCombined(column, emptyField) > columnMask;
 }
 
 bool BitBoard::isRedTurn(){
@@ -53,14 +63,14 @@ bool BitBoard::isRedTurn(){
 }
 
 void BitBoard::play(int column){
-  STATE_t move = getColumnCombined(column);
-  move = ((((move) << 1)^1) & ~move) << (column * height);
+  STATE_t move = getColumnCombined(column, emptyField);
+  move = ((((move) << 1ULL)|1ULL) & ~move) << (column * height);
 
   if(isRedTurn()){
-    stateRed = stateRed ^ move;
+    stateRed = stateRed | move;
   }
   else{
-    stateYellow = stateYellow ^ move;
+    stateYellow = stateYellow | move;
   }
 
   joinStates();
@@ -68,7 +78,6 @@ void BitBoard::play(int column){
 
 int BitBoard::getField(int x,int y) const { // 0-indexed
   int shift = y + x * height; // Rotated representation for efficiency; shift field to LSB
-  static const STATE_t CLEAR_ALL_BUT_LSB = 1ULL;
 
   // none = 0
   STATE_t hasRed = (stateRed >> shift) & CLEAR_ALL_BUT_LSB; // red = 1
@@ -100,6 +109,19 @@ bool BitBoard::hasWon(int color){
   return won;
 }
 
+bool BitBoard::isOver(){
+  return hasWon(redField) || hasWon(yellowField) || ~stateCombined == EMPTY_BOARD;
+}
+
+bool BitBoard::isDraw(){
+  return (~stateCombined == EMPTY_BOARD) && !hasWon(redField) && !hasWon(yellowField);
+}
+
+STATE_t BitBoard::getBoard(int board){
+  if(board == redField) return stateRed;
+  if(board == yellowField) return stateYellow;
+  if(board == emptyField) return stateCombined;
+}
 
 BitBoard::~BitBoard(){
 
