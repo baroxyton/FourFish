@@ -42,6 +42,7 @@ class BitBoard{
   STATE_t columnMask;
   STATE_t firstRowMask;
   STATE_t lastRowMask;
+  STATE_t ABRowMask;
 
   int width;
   int height;

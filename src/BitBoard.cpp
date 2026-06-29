@@ -28,17 +28,15 @@ void BitBoard::setDimensions(int width, int height){
 
   this->columnMask = 0;
   for(int i = 0; i < height; i++){
-    this->columnMask = (this->columnMask << 1) + 1;
+    this->columnMask = (this->columnMask << 1ULL) + 1ULL;
   }
 
   this->firstRowMask = 0;
-  for(int i = 0; i < width; i++){
-    this->firstRowMask = (this->firstRowMask << height) + 1;
-  }
-
   this->lastRowMask = 0;
   for(int i = 0; i < width; i++){
-    this->lastRowMask = ((this->lastRowMask << height) + 2) >> (height-1);
+    this->firstRowMask = (this->firstRowMask << height) + 1ULL;
+    this->ABRowMask = (this->ABRowMask << height) + 3ULL;
+    this->lastRowMask = (this->lastRowMask << height) | (1ULL << (height-1ULL));
   }
 }
 
@@ -88,18 +86,17 @@ bool BitBoard::hasWon(int color){
   }
 
   // check column win
-  bool won = ((board >> 2) & board) & (((board >> 2) & board) >> 1);
+  // **** -> ** -> *
+  //            prevent wraparound bug,   isolate 2x in a row           isalote 4x in a row
+  bool won =   (board & ((board&~ABRowMask) >> 2)) & (((board & ((board&~ABRowMask) >> 2)))&(~ABRowMask)) >> 1;
 
   // check row win
-  won = won || ((board >> 2 * height) & board) & (((board << 2 * height) & board) >> 1 * height);
+  won = won || (board & (board >> 2 * height)) & (((board >> 2 * height) & board) >> 1 * height);
 
   // check NE diagonal
-  won = won || (board & (board >> 2 * (height+1))) & ((board & (board >> 2 * (height+1))) >> (height+1));
-
-
+  won = won || (board & ((board&~ABRowMask) >> (2 * (height+1)))) & (((board & ((board&~ABRowMask) >> (2 * (height+1)))))&(~ABRowMask)) >> (height+1);
   // check SW diagonal
-  won = won || (board & (board >> 2 * (height-1))) & ((board & (board >> 2 * (height-1))) >> (height-1));
-
+  won = won || (board & ((board&~ABRowMask) >> (2 * (height-1)))) & (((board & ((board&~ABRowMask) >> (2 * (height-1)))))&(~ABRowMask)) >> (height-1);
   return won;
 }
 
