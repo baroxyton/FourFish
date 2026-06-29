@@ -19,12 +19,12 @@ BitBoard Engine::getBoard(){
   return this->board;
 }
 
-float Engine::staticEvalBoard(const BitBoard& board, int color){
+float Engine::staticEvalBoard(const BitBoard& board){
 
 }
 
-float Engine::staticEval(const BitBoard& boardRed, const BitBoard& boardYellow, int color){
-  
+float Engine::staticEval(const BitBoard& boardRed, const BitBoard& boardYellow){
+  return staticEvalBoard(boardRed) - staticEvalBoard(boardYellow);
 }
 
 Engine::~Engine(){

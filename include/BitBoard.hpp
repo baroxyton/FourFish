@@ -17,14 +17,14 @@ class BitBoard{
 
   void clear();
   void setDimensions(int width, int height);
-  int getField(int x,int y) const;
-  bool canPlay(int row);
   void play(int row);
-  bool isRedTurn();
-  bool hasWon(int color);
-  bool isOver();
-  bool isDraw();
-  STATE_t getBoard(int board);
+  int getField(int x,int y) const;
+  bool canPlay(int row) const;
+  bool isRedTurn() const;
+  bool hasWon(int color) const;
+  bool isOver() const;
+  bool isDraw() const;
+  STATE_t getBoard(int board) const;
 
   BitBoard operator>>(int shift) const;
   BitBoard operator<<(int shift) const;
@@ -34,8 +34,8 @@ class BitBoard{
 
   private:
   void joinStates();
-  STATE_t getRowCombined(int row, int boardn);
-  STATE_t getColumnCombined(int column, int boardn);
+  STATE_t getRowCombined(int row, int boardn) const;
+  STATE_t getColumnCombined(int column, int boardn) const;
   int turn;
   bool over;
 

@@ -19,7 +19,7 @@ class Engine{
 
   private:
     BitBoard board;
-    float staticEvalBoard(const BitBoard& boardRed, int color); 
-    float staticEval(const BitBoard& boardRed, const BitBoard& boardYellow, int color); 
+    float staticEvalBoard(const BitBoard& boardRed); 
+    float staticEval(const BitBoard& boardRed, const BitBoard& boardYellow); 
     int minimax(STATE_t board, int turn, int depth, float alpha, float beta);
 };

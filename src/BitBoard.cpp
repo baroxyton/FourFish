@@ -20,6 +20,7 @@ void BitBoard::clear(){
   this->stateYellow = 0;
   this->stateRed = 0;
   this->stateCombined = 0;
+  this->turn = 0;
 }
 
 void BitBoard::setDimensions(int width, int height){
@@ -40,12 +41,12 @@ void BitBoard::setDimensions(int width, int height){
   }
 }
 
-STATE_t BitBoard::getColumnCombined(int column, int boardn){
+STATE_t BitBoard::getColumnCombined(int column, int boardn) const {
   STATE_t board = getBoard(boardn);
   return (stateCombined >> (column * height)) & columnMask;
 }
 
-  STATE_t BitBoard::getRowCombined(int row, int boardn){
+STATE_t BitBoard::getRowCombined(int row, int boardn) const {
   STATE_t board = getBoard(boardn);
   STATE_t result = 0ULL;
   for(STATE_t i = 0; i < width; i++){
@@ -54,12 +55,12 @@ STATE_t BitBoard::getColumnCombined(int column, int boardn){
   return result;
 }
 
-bool BitBoard::canPlay(int column){
+bool BitBoard::canPlay(int column) const {
   return getColumnCombined(column, emptyField) > columnMask;
 }
 
-bool BitBoard::isRedTurn(){
- return turn%2 == 0;
+bool BitBoard::isRedTurn() const {
+  return turn%2 == 0;
 }
 
 void BitBoard::play(int column){
@@ -85,7 +86,7 @@ int BitBoard::getField(int x,int y) const { // 0-indexed
   return hasYellow * 2 + hasRed;
 }
 
-bool BitBoard::hasWon(int color){
+bool BitBoard::hasWon(int color) const {
   STATE_t board;
   if(color == redField){
     board = stateRed;
@@ -109,15 +110,15 @@ bool BitBoard::hasWon(int color){
   return won;
 }
 
-bool BitBoard::isOver(){
+bool BitBoard::isOver() const {
   return hasWon(redField) || hasWon(yellowField) || ~stateCombined == EMPTY_BOARD;
 }
 
-bool BitBoard::isDraw(){
+bool BitBoard::isDraw() const {
   return (~stateCombined == EMPTY_BOARD) && !hasWon(redField) && !hasWon(yellowField);
 }
 
-STATE_t BitBoard::getBoard(int board){
+STATE_t BitBoard::getBoard(int board) const {
   if(board == redField) return stateRed;
   if(board == yellowField) return stateYellow;
   if(board == emptyField) return stateCombined;
