@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(FourFish 
     src/main.cpp
     src/BitBoard.cpp
+    src/Engine.cpp
 )
 
 target_include_directories(FourFish PRIVATE include)
