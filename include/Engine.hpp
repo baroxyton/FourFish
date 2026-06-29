@@ -1,5 +1,4 @@
 #pragma once
-#include <bitset>
 #include "BitBoard.hpp"
 
 struct MinimaxResult{
@@ -9,16 +8,18 @@ struct MinimaxResult{
 
 class Engine{
   public:
+    bool redTurn;
     Engine();
     void loadBoard(BitBoard board);
-   int bestMove(int depth);
-   int eval(int depth);
-   bool redTurn;
-   BitBoard getBoard();
-   ~Engine();
+    int bestMove(int depth);
+    MinimaxResult eval(int depth);
+    BitBoard getBoard();
+    float staticEval();
+    ~Engine();
 
   private:
-   BitBoard board;
-   int staticEval(STATE_t board); 
-   int minimax(STATE_t board, int turn, int depth, int alpha, int beta);
+    BitBoard board;
+    float staticEvalBoard(const BitBoard& boardRed, int color); 
+    float staticEval(const BitBoard& boardRed, const BitBoard& boardYellow, int color); 
+    int minimax(STATE_t board, int turn, int depth, float alpha, float beta);
 };
