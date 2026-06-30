@@ -1,4 +1,5 @@
-#include "BitBoard.hpp"
+#include "TUI.hpp"
 int main(){
-  BitBoard test;
+  TUI tui;
+  tui.start();
 }

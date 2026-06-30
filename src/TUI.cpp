@@ -4,6 +4,7 @@
 #include <string>
 #include <thread>
 #include <iostream>
+#include "BitBoard.hpp"
 
 TUI::TUI(){
   this->startscreen = true;
@@ -24,6 +25,28 @@ std::string TUI::getInput(std::string prompt){
   return result;
 }
 
+void TUI::renderBoard(){
+  clear();
+  int width = board.width;
+  int height = board.height;
+
+  for(int i = 0; i < width; i++){
+    for(int j = 0; j < height; j++){
+      int px = board.getField(i, j);
+      if(px == redField){
+        std::cout << "[🔴]";
+      }
+      if(px == yellowField){
+        std::cout << "[🟡]";
+      }
+      if(px == emptyField){
+        std::cout << "[  ]";
+      }
+    }
+    std::cout << std::endl;
+  }
+}
+
 void TUI::start(){
   int delay = 16; // ms
   while(running){
@@ -37,12 +60,16 @@ void TUI::start(){
     renderBoard();
     bool played = false;
     while(!played){
-    int move = std::stoi(getInput("enter move (1-7): "));
-    bool canPlay = board.canPlay(move);
-    if(canPlay){
-      board.play(move);
-      played = true;
-    }
+      int move = std::stoi(getInput("enter move (1-7): "));
+      bool canPlay = board.canPlay(move);
+      if(canPlay){
+        board.play(move);
+        played = true;
+      }
     }
   }
+}
+
+TUI::~TUI(){
+
 }
