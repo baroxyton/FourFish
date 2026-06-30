@@ -2,7 +2,7 @@
 #include "BitBoard.hpp"
 
 struct MinimaxResult{
-  int eval;
+  float eval;
   int move;
 };
 
@@ -19,7 +19,7 @@ class Engine{
 
   private:
     BitBoard board;
-    float staticEvalBoard(const BitBoard& boardRed); 
-    float staticEval(const BitBoard& boardRed, const BitBoard& boardYellow); 
-    int minimax(STATE_t board, int turn, int depth, float alpha, float beta);
+    float staticEvalSide(const BitBoard& board, int side); 
+    float staticEval(const BitBoard& board); 
+    MinimaxResult minimax(BitBoard board, int depth, float alpha, float beta);
 };

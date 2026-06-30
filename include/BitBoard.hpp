@@ -1,5 +1,4 @@
 #pragma once
-#include <cstddef>
 #include <cstdint>
 #define STATE_t uint64_t
 
@@ -11,43 +10,47 @@
 
 class BitBoard{
   public:
-  BitBoard();
-  BitBoard(STATE_t stateRed, STATE_t stateYellow);
-  ~BitBoard();
+    BitBoard();
+    BitBoard(STATE_t stateRed, STATE_t stateYellow);
+    ~BitBoard();
 
-  void clear();
-  void setDimensions(int width, int height);
-  void play(int row);
-  int getField(int x,int y) const;
-  bool canPlay(int row) const;
-  bool isRedTurn() const;
-  bool hasWon(int color) const;
-  bool isOver() const;
-  bool isDraw() const;
-  STATE_t getBoard(int board) const;
+    void clear();
+    void setDimensions(int width, int height);
+    void play(int row);
+    int getField(int x,int y) const;
+    bool canPlay(int row) const;
+    bool isRedTurn() const;
+    bool hasWon(int color) const;
+    bool isOver() const;
+    bool isDraw() const;
+    STATE_t getBoard(int board) const;
 
-  BitBoard operator>>(int shift) const;
-  BitBoard operator<<(int shift) const;
-  BitBoard operator^(BitBoard board) const;
+    static STATE_t getRow(STATE_t board, int width, int height, int row);
+    static STATE_t getColumn(STATE_t board, STATE_t columnMask, int height, int column);
+
+
+    BitBoard operator>>(int shift) const;
+    BitBoard operator<<(int shift) const;
+    BitBoard operator^(BitBoard board) const;
+    STATE_t columnMask;
+    STATE_t firstRowMask;
+    STATE_t lastRowMask;
+    STATE_t ABRowMask;
+    int width;
+    int height;
 
 
 
   private:
-  void joinStates();
-  STATE_t getRowCombined(int row, int boardn) const;
-  STATE_t getColumnCombined(int column, int boardn) const;
-  int turn;
-  bool over;
+    void joinStates();
+    STATE_t getRow(int row, STATE_t board) const;
+    STATE_t getColumn(int column, STATE_t board) const;
+    int turn;
+    bool over;
 
-  STATE_t stateRed;
-  STATE_t stateYellow;
-  STATE_t stateCombined;
-  STATE_t columnMask;
-  STATE_t firstRowMask;
-  STATE_t lastRowMask;
-  STATE_t ABRowMask;
+    STATE_t stateRed;
+    STATE_t stateYellow;
+    STATE_t stateCombined;
 
-  int width;
-  int height;
 };
 

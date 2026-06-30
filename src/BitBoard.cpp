@@ -41,13 +41,11 @@ void BitBoard::setDimensions(int width, int height){
   }
 }
 
-STATE_t BitBoard::getColumnCombined(int column, int boardn) const {
-  STATE_t board = getBoard(boardn);
-  return (stateCombined >> (column * height)) & columnMask;
+STATE_t BitBoard::getColumn(int column, STATE_t board) const {
+  return (board >> (column * height)) & columnMask;
 }
 
-STATE_t BitBoard::getRowCombined(int row, int boardn) const {
-  STATE_t board = getBoard(boardn);
+STATE_t BitBoard::getRow(STATE_t board, int width, int height, int row){
   STATE_t result = 0ULL;
   for(STATE_t i = 0; i < width; i++){
     result |= ((board << (height*i + row)) & CLEAR_ALL_BUT_LSB) >> row;
@@ -56,7 +54,7 @@ STATE_t BitBoard::getRowCombined(int row, int boardn) const {
 }
 
 bool BitBoard::canPlay(int column) const {
-  return getColumnCombined(column, emptyField) > columnMask;
+  return getColumn(stateCombined, columnMask, height, column) > columnMask;
 }
 
 bool BitBoard::isRedTurn() const {
@@ -64,7 +62,7 @@ bool BitBoard::isRedTurn() const {
 }
 
 void BitBoard::play(int column){
-  STATE_t move = getColumnCombined(column, emptyField);
+  STATE_t move = getColumn(column, emptyField);
   move = ((((move) << 1ULL)|1ULL) & ~move) << (column * height);
 
   if(isRedTurn()){
@@ -77,7 +75,7 @@ void BitBoard::play(int column){
   joinStates();
 }
 
-int BitBoard::getField(int x,int y) const { // 0-indexed
+int BitBoard::getField(int x, int y) const {
   int shift = y + x * height; // Rotated representation for efficiency; shift field to LSB
 
   // none = 0
@@ -86,15 +84,8 @@ int BitBoard::getField(int x,int y) const { // 0-indexed
   return hasYellow * 2 + hasRed;
 }
 
-bool BitBoard::hasWon(int color) const {
-  STATE_t board;
-  if(color == redField){
-    board = stateRed;
-  }
-  else{
-    board = stateYellow;
-  }
-
+bool BitBoard::hasWon(int color) const{
+  STATE_t board = getBoard(color);
   // check column win
   // **** -> ** -> *
   //            prevent wraparound bug,   isolate 2x in a row           isalote 4x in a row
@@ -105,7 +96,7 @@ bool BitBoard::hasWon(int color) const {
 
   // check NE diagonal
   won = won || (board & ((board&~ABRowMask) >> (2 * (height+1)))) & (((board & ((board&~ABRowMask) >> (2 * (height+1)))))&(~ABRowMask)) >> (height+1);
-  // check SW diagonal
+  // check NW diagonal
   won = won || (board & ((board&~ABRowMask) >> (2 * (height-1)))) & (((board & ((board&~ABRowMask) >> (2 * (height-1)))))&(~ABRowMask)) >> (height-1);
   return won;
 }
