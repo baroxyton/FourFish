@@ -25,9 +25,6 @@ class BitBoard{
     bool isDraw() const;
     STATE_t getBoard(int board) const;
 
-    static STATE_t getRow(STATE_t board, int width, int height, int row);
-    static STATE_t getColumn(STATE_t board, STATE_t columnMask, int height, int column);
-
 
     BitBoard operator>>(int shift) const;
     BitBoard operator<<(int shift) const;

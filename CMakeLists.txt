@@ -9,6 +9,7 @@ add_executable(FourFish
     src/main.cpp
     src/BitBoard.cpp
     src/Engine.cpp
+    src/TUI.cpp
 )
 
 target_include_directories(FourFish PRIVATE include)

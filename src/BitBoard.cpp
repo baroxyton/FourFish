@@ -45,7 +45,7 @@ STATE_t BitBoard::getColumn(int column, STATE_t board) const {
   return (board >> (column * height)) & columnMask;
 }
 
-STATE_t BitBoard::getRow(STATE_t board, int width, int height, int row){
+STATE_t BitBoard::getRow(int row, STATE_t board) const{
   STATE_t result = 0ULL;
   for(STATE_t i = 0; i < width; i++){
     result |= ((board << (height*i + row)) & CLEAR_ALL_BUT_LSB) >> row;
@@ -54,7 +54,7 @@ STATE_t BitBoard::getRow(STATE_t board, int width, int height, int row){
 }
 
 bool BitBoard::canPlay(int column) const {
-  return getColumn(stateCombined, columnMask, height, column) > columnMask;
+  return getColumn(column, stateCombined) > columnMask;
 }
 
 bool BitBoard::isRedTurn() const {
