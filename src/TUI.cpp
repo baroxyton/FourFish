@@ -8,6 +8,9 @@
 
 TUI::TUI(){
   this->startscreen = true;
+  board.clear();
+  board.play(0);
+  board.play(2);
 }
 
 void TUI::exit(){
@@ -26,13 +29,18 @@ std::string TUI::getInput(std::string prompt){
 }
 
 void TUI::renderBoard(){
-  clear();
   int width = board.width;
   int height = board.height;
 
-  for(int i = 0; i < width; i++){
-    for(int j = 0; j < height; j++){
-      int px = board.getField(i, j);
+  clear();
+  std::cout << board.getBoard(redField) << std::endl;
+  std::cout << board.getBoard(yellowField) << std::endl;
+  std::cout << "\n\n\n\n\n";
+
+  for(int i = height-1; i >= 0; i--){
+    std::cout << "          ";
+    for(int j = 0; j < width; j++){
+      int px = board.getField(j, i);
       if(px == redField){
         std::cout << "[🔴]";
       }
@@ -65,6 +73,9 @@ void TUI::start(){
       if(canPlay){
         board.play(move);
         played = true;
+      }
+      else{
+        std::cout << "Invalid move" << std::to_string(move) << std::endl;
       }
     }
   }

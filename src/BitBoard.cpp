@@ -27,7 +27,7 @@ void BitBoard::setDimensions(int width, int height){
   this->height = height;
   this->width = width;
 
-  this->columnMask = 0;
+  this->columnMask = 0ULL;
   for(int i = 0; i < height; i++){
     this->columnMask = (this->columnMask << 1ULL) + 1ULL;
   }
@@ -54,7 +54,7 @@ STATE_t BitBoard::getRow(int row, STATE_t board) const{
 }
 
 bool BitBoard::canPlay(int column) const {
-  return getColumn(column, stateCombined) > columnMask;
+  return getColumn(column, stateCombined) < columnMask;
 }
 
 bool BitBoard::isRedTurn() const {
@@ -71,17 +71,16 @@ void BitBoard::play(int column){
   else{
     stateYellow = stateYellow | move;
   }
-
+  turn++;
   joinStates();
 }
 
 int BitBoard::getField(int x, int y) const {
-  int shift = y + x * height; // Rotated representation for efficiency; shift field to LSB
+  STATE_t shift = y + x * height;
 
-  // none = 0
-  STATE_t hasRed = (stateRed >> shift) & CLEAR_ALL_BUT_LSB; // red = 1
-  STATE_t hasYellow = (stateYellow >> shift) & CLEAR_ALL_BUT_LSB; // yellow = 2
-  return hasYellow * 2 + hasRed;
+  STATE_t hasRed = (stateRed >> shift) & CLEAR_ALL_BUT_LSB;
+  STATE_t hasYellow = (stateYellow >> shift) & CLEAR_ALL_BUT_LSB;
+  return 2 - hasRed*2 - hasYellow; // red = 0, red = 1, yellow= 2
 }
 
 bool BitBoard::hasWon(int color) const{
@@ -111,8 +110,8 @@ bool BitBoard::isDraw() const {
 
 STATE_t BitBoard::getBoard(int board) const {
   if(board == redField) return stateRed;
-  if(board == yellowField) return stateYellow;
-  if(board == emptyField) return stateCombined;
+  else if (board == yellowField) return stateYellow;
+  else return stateCombined;
 }
 
 BitBoard::~BitBoard(){
