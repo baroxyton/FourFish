@@ -9,8 +9,6 @@
 TUI::TUI(){
   this->startscreen = true;
   board.clear();
-  board.play(0);
-  board.play(2);
 }
 
 void TUI::exit(){

@@ -62,7 +62,7 @@ bool BitBoard::isRedTurn() const {
 }
 
 void BitBoard::play(int column){
-  STATE_t move = getColumn(column, emptyField);
+  STATE_t move = getColumn(column, stateCombined);
   move = ((((move) << 1ULL)|1ULL) & ~move) << (column * height);
 
   if(isRedTurn()){
