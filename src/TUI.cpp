@@ -76,6 +76,21 @@ void TUI::start(){
         std::cout << "Invalid move" << std::to_string(move) << std::endl;
       }
     }
+
+    renderBoard();
+    if(board.hasWon(redField)){
+      std::cout << "Red won!" << std::endl;
+      
+      this->exit();
+    }
+    if(board.hasWon(yellowField)){
+      std::cout << "Yellow won!" << std::endl;
+      this->exit();
+    }
+    if(board.isDraw()){
+      std::cout << "It's a draw!" << std::endl;
+      this->exit();
+    }
   }
 }
 

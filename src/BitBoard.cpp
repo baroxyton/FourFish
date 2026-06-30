@@ -88,15 +88,15 @@ bool BitBoard::hasWon(int color) const{
   // check column win
   // **** -> ** -> *
   //            prevent wraparound bug,   isolate 2x in a row           isalote 4x in a row
-  bool won =   (board & ((board&~ABRowMask) >> 2)) & (((board & ((board&~ABRowMask) >> 2)))&(~ABRowMask)) >> 1;
+  bool won =   (board & ((board&~ABRowMask) >> 2ULL)) & ((((board & ((board&~ABRowMask) >> 2ULL)))&(~firstRowMask)) >> 1ULL);
 
   // check row win
-  won = won || (board & (board >> 2 * height)) & (((board >> 2 * height) & board) >> 1 * height);
+  won = won || ((board & (board >> 2ULL * height)) & (((board >> 2ULL * height) & board) >> 1ULL * height));
 
   // check NE diagonal
-  won = won || (board & ((board&~ABRowMask) >> (2 * (height+1)))) & (((board & ((board&~ABRowMask) >> (2 * (height+1)))))&(~ABRowMask)) >> (height+1);
+  won = won || ((board & ((board&~ABRowMask) >> (2ULL * (height+1)))) & ((((board & ((board&~ABRowMask) >> (2ULL * (height+1)))))&(~firstRowMask)) >> (height+1)));
   // check NW diagonal
-  won = won || (board & ((board&~ABRowMask) >> (2 * (height-1)))) & (((board & ((board&~ABRowMask) >> (2 * (height-1)))))&(~ABRowMask)) >> (height-1);
+  won = won || ((board & ((board&~ABRowMask) >> (2ULL * (height-1)))) & ((((board & ((board&~ABRowMask) >> (2ULL * (height-1)))))&(~firstRowMask)) >> (height-1)));
   return won;
 }
 
