@@ -31,8 +31,6 @@ void TUI::renderBoard(){
   int height = board.height;
 
   clear();
-  std::cout << board.getBoard(redField) << std::endl;
-  std::cout << board.getBoard(yellowField) << std::endl;
   std::cout << "\n\n\n\n\n";
 
   for(int i = height-1; i >= 0; i--){
@@ -53,7 +51,28 @@ void TUI::renderBoard(){
   }
 }
 
+bool TUI::winCheck(){
+    if(board.hasWon(redField)){
+      std::cout << "Red won!" << std::endl;
+      
+      this->exit();
+      return true;
+    }
+    if(board.hasWon(yellowField)){
+      std::cout << "Yellow won!" << std::endl;
+      this->exit();
+      return true;
+    }
+    if(board.isDraw()){
+      std::cout << "It's a draw!" << std::endl;
+      this->exit();
+      return true;
+    }
+  return false;
+}
+
 void TUI::start(){
+  board.play(3);
   int delay = 16; // ms
   while(running){
     std::this_thread::sleep_for(std::chrono::milliseconds(delay));
@@ -78,18 +97,18 @@ void TUI::start(){
     }
 
     renderBoard();
-    if(board.hasWon(redField)){
-      std::cout << "Red won!" << std::endl;
-      
-      this->exit();
+    bool over = winCheck();
+    if(over){
+      continue;
     }
-    if(board.hasWon(yellowField)){
-      std::cout << "Yellow won!" << std::endl;
-      this->exit();
-    }
-    if(board.isDraw()){
-      std::cout << "It's a draw!" << std::endl;
-      this->exit();
+    std::cout << "Engine is thinking.." << std::endl;
+    //engine.loadBoard(board);
+    //int engineMove = engine.bestMove(11);
+    //board.play(engineMove);
+    //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    over = winCheck();
+    if(over){
+      continue;
     }
   }
 }

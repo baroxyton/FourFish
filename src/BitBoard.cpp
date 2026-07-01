@@ -54,7 +54,7 @@ STATE_t BitBoard::getRow(int row, STATE_t board) const{
 }
 
 bool BitBoard::canPlay(int column) const {
-  return getColumn(column, stateCombined) < columnMask;
+  return (column >= width) || getColumn(column, stateCombined) < columnMask || hasWon(redField) || hasWon(yellowField);
 }
 
 bool BitBoard::isRedTurn() const {
@@ -87,7 +87,6 @@ bool BitBoard::hasWon(int color) const{
   STATE_t board = getBoard(color);
   // check column win
   // **** -> ** -> *
-  //            prevent wraparound bug,   isolate 2x in a row           isalote 4x in a row
   bool won =   (board & ((board&~ABRowMask) >> 2ULL)) & ((((board & ((board&~ABRowMask) >> 2ULL)))&(~firstRowMask)) >> 1ULL);
 
   // check row win
@@ -95,6 +94,7 @@ bool BitBoard::hasWon(int color) const{
 
   // check NE diagonal
   won = won || ((board & ((board&~ABRowMask) >> (2ULL * (height+1)))) & ((((board & ((board&~ABRowMask) >> (2ULL * (height+1)))))&(~firstRowMask)) >> (height+1)));
+
   // check NW diagonal
   won = won || ((board & ((board&~ABRowMask) >> (2ULL * (height-1)))) & ((((board & ((board&~ABRowMask) >> (2ULL * (height-1)))))&(~firstRowMask)) >> (height-1)));
   return won;

@@ -21,5 +21,5 @@ class Engine{
     BitBoard board;
     float staticEvalSide(const BitBoard& board, int side); 
     float staticEval(const BitBoard& board); 
-    MinimaxResult minimax(BitBoard board, int depth, float alpha, float beta);
+    MinimaxResult minimax(BitBoard& board, int depth, float alpha, float beta);
 };
