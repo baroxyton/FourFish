@@ -108,7 +108,7 @@ MinimaxResult Engine::minimax(BitBoard& board, int depth, float alpha, float bet
     if(!isRedTurn && newBoard.hasWon(yellowField)){
       return {-FLOATINFTY - depth, i};
     }
-    if(depth == 0 || newBoard.isOver()){
+    if(depth == 0 || ~newBoard.getBoard(emptyField) == EMPTY_BOARD){
       result = staticEval(newBoard);
     }
 

@@ -8,7 +8,6 @@ class TUI{
     TUI();
     void loadBoard(BitBoard board);
     void start();
-    void exit();
     ~TUI();
 
 
@@ -17,8 +16,6 @@ class TUI{
     void renderBoard();
     void clear();
     bool winCheck();
-    bool running;
-    bool startscreen;
     BitBoard board;
     Engine engine;
 };
