@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "BitBoard.hpp"
 
 struct MinimaxResult{
@@ -22,4 +23,6 @@ class Engine{
     float staticEvalSide(const BitBoard& board, int side); 
     float staticEval(const BitBoard& board); 
     MinimaxResult minimax(BitBoard& board, int depth, float alpha, float beta);
+    void updateExploreOrder();
+    std::vector<int> exploreOrder;
 };

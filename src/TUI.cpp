@@ -72,7 +72,6 @@ bool TUI::winCheck(){
 }
 
 void TUI::start(){
-  board.play(3);
   int delay = 16; // ms
   while(running){
     std::this_thread::sleep_for(std::chrono::milliseconds(delay));
@@ -102,10 +101,16 @@ void TUI::start(){
       continue;
     }
     std::cout << "Engine is thinking.." << std::endl;
-    //engine.loadBoard(board);
-    //int engineMove = engine.bestMove(11);
-    //board.play(engineMove);
-    //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    engine.loadBoard(board);
+    int engineMove = engine.bestMove(14);
+    if(engineMove == -1){
+      over = true;
+      std::cout << "Engine resigned" << std::endl;
+      break;
+    }
+    board.play(engineMove);
+    std::cout << "Engine move: " << engineMove << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     over = winCheck();
     if(over){
       continue;
