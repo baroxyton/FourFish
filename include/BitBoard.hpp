@@ -33,6 +33,7 @@ class BitBoard{
     STATE_t firstRowMask;
     STATE_t lastRowMask;
     STATE_t ABRowMask;
+    STATE_t lastTwoRowMask;
     int width;
     int height;
 

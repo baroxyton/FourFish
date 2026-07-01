@@ -38,6 +38,7 @@ void BitBoard::setDimensions(int width, int height){
     this->firstRowMask = (this->firstRowMask << height) + 1ULL;
     this->ABRowMask = (this->ABRowMask << height) + 3ULL;
     this->lastRowMask = (this->lastRowMask << height) | (1ULL << (height-1ULL));
+    this->lastTwoRowMask = (this->lastTwoRowMask << height) | (3ULL << (height-2ULL));
   }
 }
 
@@ -96,7 +97,7 @@ bool BitBoard::hasWon(int color) const{
   won = won || ((board & ((board&~ABRowMask) >> (2ULL * (height+1)))) & ((((board & ((board&~ABRowMask) >> (2ULL * (height+1)))))&(~firstRowMask)) >> (height+1)));
 
   // check NW diagonal
-  won = won || ((board & ((board&~ABRowMask) >> (2ULL * (height-1)))) & ((((board & ((board&~ABRowMask) >> (2ULL * (height-1)))))&(~firstRowMask)) >> (height-1)));
+  won = won || ((board & ((board&~lastTwoRowMask) >> (2ULL * (height-1)))) & ((((board & ((board&~lastTwoRowMask) >> (2ULL * (height-1)))))&(~lastRowMask)) >> (height-1)));
   return won;
 }
 
