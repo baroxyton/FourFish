@@ -22,6 +22,6 @@ A toy single-threaded connect 4 minimax engine written from scratch.
 ## Running
 
 ```bash
-mkdir build && cmake .. && make -j14
+git clone https://github.com/baroxyton/FourFish && cd FourFish && mkdir build && cd build && cmake .. && make -j14
 ./FourFish
 ```
